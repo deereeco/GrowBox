@@ -1,0 +1,184 @@
+<head>
+  <!-- Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+	#myDiv0 {text-align: center}
+  </style>
+</head>
+
+<body>
+    
+  	<script>
+
+		var myreq = new XMLHttpRequest();
+		myreq.open('GET','https://mushroomdata.ngrok.io');
+		myreq.onload = function() {
+		  	var data = JSON.parse(myreq.responseText);
+		  	console.log(data);
+			
+			// make the header info for the mushroom module
+			if (data.cycleStatus === "in use"){
+				var headerInfo  = "The Mushroom Grow cycle was started on: " + data.startDate;
+				    headerInfo += "<p></p>They will be ready on: " + data.endDate;
+				    headerInfo += "<p></p>See below for Temperature and Humidity history of the Mushroom Chamber";
+				}
+			if (data.cycleStatus === "waiting for next batch"){
+				var headerInfo  = "The last growth cycle ended on: " + data.endDate
+				    headerInfo += "<p></p>Awaiting for next batch of mushrooms"
+				    headerInfo += "<p></p>See below for Temperature and Humidity history of the Mushroom Chamber";
+				}
+
+			
+			// post the header info to "myDiv0" which is at the top of the page in the middle
+			document.getElementById("myDiv0").innerHTML = headerInfo;
+
+		  	var dayIndexes = getDayIndexes(data.time.day); // this is the list of tupled lists that holds the indexes that the days change
+
+		  	var numOfDays = dayIndexes.length;
+
+		  	var downCounter = numOfDays - 1;
+		  	var upCounter = 1;
+
+		  	//var tracecounter = 0; //this will be used to name different traces and layouts
+		  	while (upCounter<=numOfDays) {  //while we have not traversed through all the days yet, lets keep on graphing
+		  		//starting from the end of the list because that is the most recent day and we want this at the top of the page
+		  		let currentIndex = dayIndexes[downCounter];
+		  		let lowerLim = currentIndex[0];
+		  		let upperLim = currentIndex[1];
+
+				let trace1 = {
+				  x: data.time.hour.slice(lowerLim,upperLim+1),
+				  y: data.temperature.slice(lowerLim,upperLim+1),
+				  mode: 'lines+markers',
+				  name: 'temp'
+				};
+
+				let trace2 = {
+				  x: data.time.hour.slice(lowerLim,upperLim+1),
+				  y: data.humidity.slice(lowerLim,upperLim+1),
+				  mode: 'lines+markers',
+				  name: 'humidity'
+				};
+
+				let traces = [trace1, trace2];
+
+				let dateDisplay = String(data.time.month[lowerLim])+"/"+String(data.time.day[lowerLim])+"/"+String(data.time.year[lowerLim]);
+
+				let layout = {
+				  title: 'Temp and Humidity of Dom\'s room for ' + dateDisplay,
+				  xaxis: {
+				    title: 'Hour of the day'
+				  },
+				  yaxis: {
+				    title: 'Farenheit and Percentage (C and %)'
+				  }
+				};
+
+				let divName = 'myDiv' + upCounter;
+				
+				Plotly.newPlot(divName, traces, layout);
+
+		  		downCounter --
+		  		upCounter ++
+		  	}
+			
+		};
+		myreq.send();
+
+	//this function will return a list with the indexes necessesary to make graphs for each day
+	function getDayIndexes(dayList) {
+		var dayIndexes = [];
+		var index = 0;
+		var counter = 1;
+		var num1 = dayList[counter-1];
+		var num2 = dayList[counter];
+		if(counter === 1 && num1 === num2){
+				dayIndexes.push([0]);
+			}
+		while (counter <= dayList.length) { //traverse through dayList
+			var num1 = dayList[counter-1];
+			var num2 = dayList[counter];
+			if(num1 != num2){
+				dayIndexes[index].push(counter-1);		//set the max of the current day
+				if (counter != dayList.length){
+					dayIndexes.push([counter]);				//ser the min of the next interval
+					index ++								//keep track of the place in 
+				}
+			}
+			counter++
+		}
+		return dayIndexes
+	}
+
+  </script>
+
+  	<div id='myDiv0'></div>
+	<div id='myDiv1'></div>
+	<div id='myDiv2'></div>
+	<div id='myDiv3'></div>
+	<div id='myDiv4'></div>
+	<div id='myDiv5'></div>
+	<div id='myDiv6'></div>
+	<div id='myDiv7'></div>
+	<div id='myDiv8'></div>
+	<div id='myDiv9'></div>
+	<div id='myDiv10'></div>
+	<div id='myDiv11'></div>
+	<div id='myDiv12'></div>
+	<div id='myDiv13'></div>
+	<div id='myDiv14'></div>
+	<div id='myDiv15'></div>
+	<div id='myDiv16'></div>
+	<div id='myDiv17'></div>
+	<div id='myDiv18'></div>
+	<div id='myDiv19'></div>
+	<div id='myDiv20'></div>
+	<div id='myDiv21'></div>
+	<div id='myDiv22'></div>
+	<div id='myDiv23'></div>
+	<div id='myDiv24'></div>
+	<div id='myDiv25'></div>
+	<div id='myDiv26'></div>
+	<div id='myDiv27'></div>
+	<div id='myDiv28'></div>
+	<div id='myDiv29'></div>
+	<div id='myDiv30'></div>
+	<div id='myDiv31'></div>
+	<div id='myDiv32'></div>
+	<div id='myDiv33'></div>
+	<div id='myDiv34'></div>
+	<div id='myDiv35'></div>
+	<div id='myDiv36'></div>
+	<div id='myDiv37'></div>
+	<div id='myDiv38'></div>
+	<div id='myDiv39'></div>
+	<div id='myDiv40'></div>
+	<div id='myDiv41'></div>
+	<div id='myDiv42'></div>
+	<div id='myDiv43'></div>
+	<div id='myDiv44'></div>
+	<div id='myDiv45'></div>
+	<div id='myDiv46'></div>
+	<div id='myDiv47'></div>
+	<div id='myDiv48'></div>
+	<div id='myDiv49'></div>
+	<div id='myDiv50'></div>
+	<div id='myDiv51'></div>
+	<div id='myDiv52'></div>
+	<div id='myDiv53'></div>
+	<div id='myDiv54'></div>
+	<div id='myDiv55'></div>
+	<div id='myDiv56'></div>
+	<div id='myDiv57'></div>
+	<div id='myDiv58'></div>
+	<div id='myDiv59'></div>
+	<div id='myDiv60'></div>
+	
+
+</body>
+
+
+
+
+
+
